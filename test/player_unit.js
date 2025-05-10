@@ -2282,10 +2282,10 @@ describe('Player', () => {
 
     it('returns the correct tracks', () => {
       expect(player.getVariantTracks()).toEqual(
-        variantTracks.filter((t) => t.videoId === 1 ));
+          variantTracks.filter((t) => t.videoId === 1 ));
       expect(player.getAudioTracks()).toEqual(audioTracks);
       expect(player.getVideoTracks()).toEqual(
-        videoTracks.filter((t) => t.active));
+          videoTracks.filter((t) => t.active));
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
     });
@@ -2308,10 +2308,10 @@ describe('Player', () => {
       await player.load(fakeManifestUri, 0, fakeMimeType);
 
       expect(player.getVariantTracks()).toEqual(
-        variantTracks.filter((t) => t.videoId === 1 ));
+          variantTracks.filter((t) => t.videoId === 1 ));
       expect(player.getAudioTracks()).toEqual(audioTracks);
       expect(player.getVideoTracks()).toEqual(
-        videoTracks.filter((t) => t.active));
+          videoTracks.filter((t) => t.active));
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
     });
@@ -2322,7 +2322,7 @@ describe('Player', () => {
 
       const oldTrack = player.getVariantTracks()[0];
       const newTrack =
-        variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
+        variantTracks.filter((t) => t.videoId != oldTrack.videoId)[0];
       player.selectVariantTrack(newTrack);
 
       config = player.getConfiguration();
@@ -2335,7 +2335,7 @@ describe('Player', () => {
 
       const oldTrack = player.getVariantTracks()[0];
       const newTrack =
-        textTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
+        textTracks.filter((t) => t.videoId != oldTrack.videoId)[0];
       player.selectTextTrack(newTrack);
 
       config = player.getConfiguration();
@@ -2345,7 +2345,7 @@ describe('Player', () => {
     it('switches streams', () => {
       const oldTrack = player.getVariantTracks()[0];
       const newTrack =
-        variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
+        variantTracks.filter((t) => t.videoId != oldTrack.videoId)[0];
       player.selectVariantTrack(newTrack);
 
       expect(streamingEngine.switchVariant).toHaveBeenCalled();
@@ -2368,7 +2368,8 @@ describe('Player', () => {
       expect(getActiveTextTrack().id).toBe(englishTextTrack.id);
 
       const oldTrack = player.getVariantTracks()[0];
-      const newVariantTrack = variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
+      const newVariantTrack =
+        variantTracks.filter((t) => t.videoId != oldTrack.videoId)[0];
       player.selectVariantTrack(newVariantTrack);
  
       // The active text track has not changed, even though the text language
