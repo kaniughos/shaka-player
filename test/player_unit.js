@@ -103,7 +103,7 @@ describe('Player', () => {
       });
       manifest.addVariant(1, (variant) => {
         variant.addAudio(1);
-        variant.addVideo(4);
+        variant.addVideo(2); //this value has to  be equal to active  video
       });
     });
 
@@ -307,7 +307,7 @@ describe('Player', () => {
             variant.addAudio(3, (stream) => {
               stream.mime('audio/webm', 'opus');
             });
-            variant.addVideo(4, (stream) => {
+            variant.addVideo(2, (stream) => {
               stream.mime('video/webm', 'vp8');
             });
           });
@@ -2281,9 +2281,9 @@ describe('Player', () => {
     });
 
     it('returns the correct tracks', () => {
-      expect(player.getVariantTracks()).toEqual(variantTracks);
+      expect(player.getVariantTracks()).toEqual(variantTracks.filter((t) => t.videoId === 1 ));
       expect(player.getAudioTracks()).toEqual(audioTracks);
-      expect(player.getVideoTracks()).toEqual(videoTracks);
+      expect(player.getVideoTracks()).toEqual(videoTracks.filter((t) => t.active));
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
     });
@@ -2305,9 +2305,9 @@ describe('Player', () => {
 
       await player.load(fakeManifestUri, 0, fakeMimeType);
 
-      expect(player.getVariantTracks()).toEqual(variantTracks);
+      expect(player.getVariantTracks()).toEqual(variantTracks.filter((t) => t.videoId === 1 ));
       expect(player.getAudioTracks()).toEqual(audioTracks);
-      expect(player.getVideoTracks()).toEqual(videoTracks);
+      expect(player.getVideoTracks()).toEqual(videoTracks.filter((t) => t.active));
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
     });
@@ -2316,7 +2316,8 @@ describe('Player', () => {
       let config = player.getConfiguration();
       expect(config.abr.enabled).toBe(true);
 
-      const newTrack = player.getVariantTracks().filter((t) => !t.active)[0];
+      const oldTrack = player.getVariantTracks()[0];
+      const newTrack = variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
       player.selectVariantTrack(newTrack);
 
       config = player.getConfiguration();
@@ -2327,7 +2328,8 @@ describe('Player', () => {
       let config = player.getConfiguration();
       expect(config.abr.enabled).toBe(true);
 
-      const newTrack = player.getTextTracks().filter((t) => !t.active)[0];
+      const oldTrack = player.getVariantTracks()[0];
+      const newTrack = textTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
       player.selectTextTrack(newTrack);
 
       config = player.getConfiguration();
@@ -2335,8 +2337,11 @@ describe('Player', () => {
     });
 
     it('switches streams', () => {
-      const newTrack = player.getVariantTracks().filter((t) => !t.active)[0];
+
+      const oldTrack = player.getVariantTracks()[0];
+      const newTrack = variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
       player.selectVariantTrack(newTrack);
+
 
       expect(streamingEngine.switchVariant).toHaveBeenCalled();
       const variant = streamingEngine.switchVariant.calls.argsFor(0)[0];
@@ -2350,17 +2355,17 @@ describe('Player', () => {
 
       // We will manually switch from Spanish to English.
       const englishTextTrack =
-          player.getTextTracks().filter((t) => t.language == 'en')[0];
+          textTracks.filter((t) => t.language == 'en')[0];
 
       player.selectTextTrack(englishTextTrack);
       expect(streamingEngine.switchTextStream).toHaveBeenCalled();
       // We have selected an English text track explicitly.
       expect(getActiveTextTrack().id).toBe(englishTextTrack.id);
 
-      const newVariantTrack =
-          player.getVariantTracks().filter((t) => !t.active)[0];
+      const oldTrack = player.getVariantTracks()[0];
+      const newVariantTrack = variantTracks.filter((t) => t.videoId !=  oldTrack.videoId)[0];
       player.selectVariantTrack(newVariantTrack);
-
+      
       // The active text track has not changed, even though the text language
       // preference is Spanish.
       expect(getActiveTextTrack().id).toBe(englishTextTrack.id);
@@ -3395,7 +3400,7 @@ describe('Player', () => {
         });
         manifest.addVariant(1, (variant) => {
           variant.bandwidth = 100;
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(30, 30);
           });
         });
@@ -3438,7 +3443,7 @@ describe('Player', () => {
         });
         manifest.addVariant(2, (variant) => {
           variant.bandwidth = 100;
-          variant.addVideo(20, (stream) => {
+          variant.addVideo(10, (stream) => {
             stream.size(30, 30);
           });
         });
@@ -3475,7 +3480,7 @@ describe('Player', () => {
         });
         manifest.addVariant(1, (variant) => {
           variant.addVideo(2, (stream) => {
-            stream.size(20, 20);
+            stream.size(10, 20);
           });
         });
       });
@@ -3510,7 +3515,7 @@ describe('Player', () => {
         });
         manifest.addVariant(1, (variant) => {
           variant.addVideo(2, (stream) => {
-            stream.size(20, 20);
+            stream.size(10, 20);
           });
         });
       });
@@ -3585,7 +3590,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2);
+          variant.addVideo(1);
         });
       });
 
@@ -3611,7 +3616,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
@@ -3636,7 +3641,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
@@ -3661,7 +3666,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
@@ -3717,8 +3722,8 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
-            stream.size(20, 20);
+          variant.addVideo(1, (stream) => {
+            stream.size(10, 20);
           });
         });
       });
@@ -3743,7 +3748,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
@@ -3767,7 +3772,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
@@ -3792,13 +3797,13 @@ describe('Player', () => {
               });
             });
             manifest.addVariant(2, (variant) => {
-              variant.addVideo(3, (stream) => {
+              variant.addVideo(1, (stream) => {
                 stream.keyIds = new Set(['xyz']);
                 stream.size(20, 20);
               });
             });
             manifest.addVariant(4, (variant) => {
-              variant.addVideo(5, (stream) => {
+              variant.addVideo(1, (stream) => {
                 stream.size(30, 30);
               });
             });
@@ -3828,7 +3833,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.encrypted = true;
             stream.addDrmInfo('foo.bar');
           });
@@ -3862,13 +3867,13 @@ describe('Player', () => {
         });
         manifest.addVariant(1, (variant) => {
           variant.bandwidth = 1500;
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
         manifest.addVariant(2, (variant) => {
           variant.bandwidth = 500;
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(30, 30);
           });
         });
@@ -3892,12 +3897,12 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(5, 5);
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(190, 190);
           });
         });
@@ -3921,12 +3926,12 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(1000, 200);
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(190, 190);
           });
         });
@@ -3951,13 +3956,13 @@ describe('Player', () => {
         });
 
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(500, 500);
           });
         });
 
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(190, 190);
           });
         });
@@ -3982,13 +3987,13 @@ describe('Player', () => {
         });
 
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.frameRate = 30;
           });
         });
 
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.frameRate = 60;
           });
         });
@@ -4013,13 +4018,13 @@ describe('Player', () => {
         });
 
         manifest.addVariant(1, (variant) => {
-          variant.addAudio(2, (stream) => {
+          variant.addAudio(1, (stream) => {
             stream.channelsCount = 2;
           });
         });
 
         manifest.addVariant(2, (variant) => {
-          variant.addAudio(3, (stream) => {
+          variant.addAudio(1, (stream) => {
             stream.channelsCount = 6;
           });
         });
@@ -4046,7 +4051,7 @@ describe('Player', () => {
         });
 
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(190, 190);
           });
           variant.addAudio(2);
@@ -4072,13 +4077,13 @@ describe('Player', () => {
         });
 
         manifest.addVariant(1, (variant) => {
-          variant.addVideo(2, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(200, 300);
           });
         });
 
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(190, 190);
           });
         });
@@ -4174,7 +4179,7 @@ describe('Player', () => {
           });
         });
         manifest.addVariant(2, (variant) => {
-          variant.addVideo(3, (stream) => {
+          variant.addVideo(1, (stream) => {
             stream.size(20, 20);
           });
         });
