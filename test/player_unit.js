@@ -2371,7 +2371,7 @@ describe('Player', () => {
       const newVariantTrack =
         variantTracks.filter((t) => t.videoId != oldTrack.videoId)[0];
       player.selectVariantTrack(newVariantTrack);
- 
+
       // The active text track has not changed, even though the text language
       // preference is Spanish.
       expect(getActiveTextTrack().id).toBe(englishTextTrack.id);
