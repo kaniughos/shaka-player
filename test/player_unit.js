@@ -2296,10 +2296,10 @@ describe('Player', () => {
       // get current active video track's related tracks
       expect(player.getVariantTracks({activeVideo: true})).toEqual(variantTracks
           .filter((t) => t.videoId === 1));
-      // this is equivaluent to no filter
+      // this is equivalent to no filter
       expect(player.getVariantTracks({activeVideo: false}))
           .toEqual(variantTracks);
-      // this videoIddoesnot exist , therefore return empty variants
+      // this videoId does not exist, therefore return empty variants
       expect(player.getVariantTracks({videoId: 2000})).toEqual([]);
     });
 
