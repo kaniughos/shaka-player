@@ -2287,8 +2287,11 @@ describe('Player', () => {
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
       //can filter getVariantTracks by videoId
-      expect(player.getVariantTracks(1)).toEqual(variantTracks.filter((t) => t.videoId===1));
-      expect(player.getVariantTracks(2)).toEqual(variantTracks.filter((t) => t.videoId===2));
+      expect(player.getVariantTracks(null)).toEqual(variantTracks);
+      expect(player.getVariantTracks(1)).toEqual(variantTracks
+        .filter((t) => t.videoId===1));
+      expect(player.getVariantTracks(2)).toEqual(variantTracks
+        .filter((t) => t.videoId===2));
       //return no variants 
       expect(player.getVariantTracks(20000)).toEqual([]); 
     });
