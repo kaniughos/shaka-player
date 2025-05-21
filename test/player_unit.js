@@ -2286,6 +2286,21 @@ describe('Player', () => {
       expect(player.getVideoTracks()).toEqual(videoTracks);
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
+      // can filter getVariantTracks by videoId or activeVideo boolean
+      expect(player.getVariantTracks(null)).toEqual(variantTracks);
+      // get specific videoId related tracks
+      expect(player.getVariantTracks({videoId: 1})).toEqual(variantTracks
+          .filter((t) => t.videoId===1));
+      expect(player.getVariantTracks({videoId: 2})).toEqual(variantTracks
+          .filter((t) => t.videoId===2));
+      // get current active video track's related tracks
+      expect(player.getVariantTracks({activeVideo: true})).toEqual(variantTracks
+          .filter((t) => t.videoId === 1));
+      // this is equivalent to no filter
+      expect(player.getVariantTracks({activeVideo: false}))
+          .toEqual(variantTracks);
+      // this videoId does not exist, therefore return empty variants
+      expect(player.getVariantTracks({videoId: 2000})).toEqual([]);
     });
 
     it('returns empty arrays before tracks can be determined', async () => {
