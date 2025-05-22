@@ -90,7 +90,7 @@ describe('Demo', () => {
           .add('drm.persistentSessionOnlinePlayback')
           .add('drm.persistentSessionsMetadata')
           .add('mediaSource.modifyCueCallback')
-	  .add('enableFilterVariantTracks');
+          .add('enableFilterVariantTracks');
 
       /**
        * @param {!Object} section
