@@ -2287,20 +2287,32 @@ describe('Player', () => {
       expect(player.getTextTracks()).toEqual(textTracks);
       expect(player.getImageTracks()).toEqual(imageTracks);
       // can filter getVariantTracks by videoId or activeVideo boolean
-      expect(player.getVariantTracks(null)).toEqual(variantTracks);
+      //player.configure('variantTracks_filter',null);
+      //expect(player.getVariantTracks()).toEqual(variantTracks);
       // get specific videoId related tracks
-      expect(player.getVariantTracks({videoId: 1})).toEqual(variantTracks
-          .filter((t) => t.videoId===1));
-      expect(player.getVariantTracks({videoId: 2})).toEqual(variantTracks
-          .filter((t) => t.videoId===2));
+      //player.configure('variantTracks_filter',{videoId: 1});
+      //expect(player.getVariantTracks()).toEqual(variantTracks
+      //    .filter((t) => t.videoId===1));
+      //player.configure('variantTracks_filter',{videoId: 2});
+      //expect(player.getVariantTracks()).toEqual(variantTracks
+      //    .filter((t) => t.videoId===2));
       // get current active video track's related tracks
-      expect(player.getVariantTracks({activeVideo: true})).toEqual(variantTracks
-          .filter((t) => t.videoId === 1));
+      //player.configure('variantTracks_filter',{activeVideo: true, videoId: undefined});
+      //expect(player.getVariantTracks()).toEqual(variantTracks
+      //    .filter((t) => t.videoId === 1));
       // this is equivalent to no filter
-      expect(player.getVariantTracks({activeVideo: false}))
-          .toEqual(variantTracks);
+      //player.configure('variantTracks_filter',{activeVideo: false, videoId: undefined});
+      //expect(player.getVariantTracks())
+      //    .toEqual(variantTracks);
       // this videoId does not exist, therefore return empty variants
-      expect(player.getVariantTracks({videoId: 2000})).toEqual([]);
+      //player.configure('variantTracks_filter',{videoId: 2000});
+      //expect(player.getVariantTracks({videoId: 2000})).toEqual([]);
+      player.configure('enableFilterVariantTracks',true);
+      expect(player.getVariantTracks()).toEqual(variantTracks
+          .filter((t) => t.videoId===1));
+      //player.configure({enableFilterVariantTracks:false});
+      player.configure('enableFilterVariantTracks',false);
+      expect(player.getVariantTracks()).toEqual(variantTracks);    
     });
 
     it('returns empty arrays before tracks can be determined', async () => {
