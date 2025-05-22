@@ -2715,7 +2715,8 @@ shaka.extern.TextDisplayerConfiguration;
  *   playRangeStart: number,
  *   playRangeEnd: number,
  *   textDisplayer: shaka.extern.TextDisplayerConfiguration,
- *   textDisplayFactory: shaka.extern.TextDisplayer.Factory
+ *   textDisplayFactory: shaka.extern.TextDisplayer.Factory,
+ *   enableFilterVariantTracks: boolean
  * }}
  *
  * @property {shaka.extern.AdsConfiguration} ads
@@ -2857,6 +2858,9 @@ shaka.extern.TextDisplayerConfiguration;
  * @property {shaka.extern.TextDisplayer.Factory} textDisplayFactory
  *   A factory to construct a text displayer. Note that, if this is changed
  *   during playback, it will cause the text tracks to be reloaded.
+ * @property {boolean} enableFilterVariantTracks
+ *   If enabled, getVariantTracks method will filter audio and text tracks
+ *   associated with the current active video track.
  * @exportDoc
  */
 shaka.extern.PlayerConfiguration;
